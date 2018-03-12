@@ -381,11 +381,7 @@ As a high-performance numerical language, Julia should be linked to a multi-thre
 
 SuiteSparse is a special case, since it is typically only installed as a static library, while `USE_SYSTEM_SUITESPARSE=1` requires that it is a shared library. Running the script `contrib/repackage_system_suitesparse4.make` will copy your static system SuiteSparse installation into the shared library format required by Julia. `make USE_SYSTEM_SUITESPARSE=1` will then use the SuiteSparse that has been copied into Julia's directory, but will not build a new SuiteSparse library from scratch.
 
-### Intel compilers and Math Kernel Library (MKL)
-
-To build Julia using the Intel compilers (icc, icpc, ifort), and link against
-the [MKL] BLAS and LAPACK libraries, first make sure you have a recent version
-of the compiler suite (version 15 or later).
+### Intel MKL
 
 For a 64-bit architecture, the environment should be set up as follows:
 
@@ -394,8 +390,6 @@ For a 64-bit architecture, the environment should be set up as follows:
 
 Add the following to the `Make.user` file:
 
-    USEICC = 1
-    USEIFC = 1
     USE_INTEL_MKL = 1
     USE_INTEL_LIBM = 1
 
