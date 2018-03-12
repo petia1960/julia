@@ -68,7 +68,7 @@ Julia is built and tested regularly on the following platforms:
 All systems marked with ✓ for CI are tested using continuous integration for every commit.
 Systems with ✓ for binaries have official binaries available on the [downloads](https://julialang.org/downloads) page and are tested regularly. The PTX backend needs a source build and the [CUDAnative.jl](https://github.com/JuliaGPU/CUDAnative.jl) package.
 The systems listed here with neither CI nor official binaries are known to build and work, but ongoing support for those platforms is dependent on community efforts.
-It's possible that Julia will build and work on other platforms too, and we're always looking to better our platform coverage.
+It is possible that Julia will build and work on other platforms too, and we're always looking to better our platform coverage.
 If you're using Julia on a platform not listed here, let us know!
 
 ## Source Download and Compilation
@@ -199,6 +199,7 @@ Julia does not install anything outside the directory it was cloned into. Julia 
 * GCC version 4.7 or later is required to build Julia.
 * To use external shared libraries not in the system library search path, set `USE_SYSTEM_XXX=1` and `LDFLAGS=-Wl,-rpath,/path/to/dir/contains/libXXX.so` in `Make.user`.
   * Instead of setting `LDFLAGS`, putting the library directory into the environment variable `LD_LIBRARY_PATH` (at both compile and run time) also works.
+* It is important to note that the `USE_SYSTEM_*` flags should be used with caution. These are meant only for troubleshooting and porting, not for production use. Issues arising from the use of these flags will generally not be accepted.
 * See also the [external dependencies](#required-build-tools-and-external-libraries).
 
 #### Architecture Customization
@@ -250,7 +251,7 @@ The remaining build tools are available from the Ports Collection, and can be in
 To build Julia, simply run `gmake`.
 (Note that `gmake` must be used rather than `make`, since `make` on FreeBSD corresponds to the incompatible BSD Make rather than GNU Make.)
 
-It's important to note that the `USE_SYSTEM_*` flags should be used with caution on FreeBSD.
+It is important to note that the `USE_SYSTEM_*` flags should be used with caution on FreeBSD.
 This is because many system libraries, and even libraries from the Ports Collection, link to the system's `libgcc_s.so.1`,
 or to another library which links to the system `libgcc_s`.
 This library declares its GCC version to be 4.6, which is too old to build Julia, and conflicts with other libraries when linking.
