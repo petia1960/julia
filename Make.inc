@@ -23,7 +23,11 @@ OPENBLAS_DYNAMIC_ARCH:=1
 endif
 OPENBLAS_USE_THREAD:=1
 
-# Use libraries available on the system instead of building them
+# Flags for using libraries available on the system instead of building them.
+# These are provided strictly for experimentation with building Julia on new
+# architectures and OSes.
+# Do not use SYSTEM versions, unless you have a good reason to.
+# Issues resulting from use of SYSTEM versions will generally not be accepted.
 USE_SYSTEM_LLVM:=0
 USE_SYSTEM_LIBUNWIND:=0
 DISABLE_LIBUNWIND:=0
