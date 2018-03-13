@@ -459,7 +459,7 @@ end
     return dest
 end
 
-# Optimization for the all-Scalar case.
+# Optimization for the case where all arguments are 0-dimensional
 @inline function broadcast!(f, dest, ::AbstractArrayStyle{0}, As::Vararg{Any, N}) where N
     if dest isa AbstractArray
         if f isa typeof(identity) && N == 1
@@ -553,19 +553,18 @@ combine_eltypes(f, A, As...) =
 
 Broadcast the function `f` over the arrays, tuples, collections, `Ref`s and/or scalars `As`.
 
-Broadcasting applies the function `f` over the elements of the container
-arguments and the scalars themselves in `As`. Singleton and missing dimensions
-are expanded to match the extents of the other arguments by virtually repeating
-the value. By default, only a limited number of types are considered scalars,
-including `Number`s, `Type`s and `Function`s; all other arguments are iterated
-over or indexed into elementwise.
+Broadcasting applies the function `f` over the elements of the container arguments and the
+scalars themselves in `As`. Singleton and missing dimensions are expanded to match the
+extents of the other arguments by virtually repeating the value. By default, only a limited
+number of types are considered scalars, including `Number`s, `String`s, `Symbol`s, `Type`s,
+`Function`s and some common singletons like `missing` and `nothing`. All other arguments are
+iterated over or indexed into elementwise.
 
 The resulting container type is established by the following rules:
 
- - If the arguments are tuples and zero or more scalars or zero-dimensional
-   arrays, it returns a tuple.
- - If the result would be a zero-dimensional array, an unwrapped scalar is
-   returned instead.
+ - If all the arguments are scalars or zero-dimensional arrays, it returns an unwrapped scalar.
+ - If at least one argument is a tuple and all others are scalars or zero-dimensional arrays,
+   it returns a tuple.
  - All other combinations of arguments default to returning an `Array`, but
    custom container types can define their own implementation and promotion-like
    rules to customize the result when they appear as arguments.
