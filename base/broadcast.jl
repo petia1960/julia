@@ -101,7 +101,7 @@ struct DefaultArrayStyle{N} <: AbstractArrayStyle{N} end
 const DefaultVectorStyle = DefaultArrayStyle{1}
 const DefaultMatrixStyle = DefaultArrayStyle{2}
 BroadcastStyle(::Type{<:AbstractArray{T,N}}) where {T,N} = DefaultArrayStyle{N}()
-BroadcastStyle(::Type{<:Union{Base.RefValue,Number}}) = DefaultArrayStyle{0}()
+BroadcastStyle(::Type{<:Union{Ref,Number}}) = DefaultArrayStyle{0}()
 
 # `ArrayConflict` is an internal type signaling that two or more different `AbstractArrayStyle`
 # objects were supplied as arguments, and that no rule was defined for resolving the
@@ -425,8 +425,8 @@ end
 Return either `x` or an object like `x` such that it supports `axes` and indexing.
 """
 broadcastable(x::Union{Symbol,AbstractString,Type,Function,UndefInitializer,Nothing,RoundingMode,Missing}) = Ref(x)
-broadcastable(x::Ptr) = Base.RefValue(x) # Cannot use Ref(::Ptr) until ambiguous deprecation goes through
-broadcastable(::Type{T}) where {T} = Base.RefValue{Type{T}}(T)
+broadcastable(x::Ptr) = Ref{Ptr}(x) # Cannot use Ref(::Ptr) until ambiguous deprecation goes through
+broadcastable(::Type{T}) where {T} = Ref{Type{T}}(T)
 broadcastable(x::AbstractArray) = x
 # In the future, default to collecting arguments. TODO: uncomment once deprecations are removed
 # broadcastable(x) = BroadcastStyle(typeof(x)) isa Unknown ? collect(x) : x
@@ -542,7 +542,7 @@ maptoTuple(f, a, b...) = Tuple{f(a), maptoTuple(f, b...).types...}
 # )::_broadcast_getindex_eltype(A)
 _broadcast_getindex_eltype(A) = _broadcast_getindex_eltype(combine_styles(A), A)
 _broadcast_getindex_eltype(::BroadcastStyle, A) = eltype(A)  # Tuple, Array, etc.
-_broadcast_getindex_eltype(::DefaultArrayStyle{0}, ::Base.RefValue{T}) where {T} = T
+_broadcast_getindex_eltype(::DefaultArrayStyle{0}, ::Ref{T}) where {T} = T
 
 # Inferred eltype of result of broadcast(f, xs...)
 combine_eltypes(f, A, As...) =
