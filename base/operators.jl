@@ -809,43 +809,50 @@ julia> filter(!isalpha, str)
 """
 !(f::Function) = (x...)->!f(x...)
 
-struct EqualTo{T} <: Function
+struct CompareTo{F,T} <: Function
     x::T
 
-    EqualTo(x::T) where {T} = new{T}(x)
+    CompareTo{F}(x::T) where {F,T} = new{F,T}(x)
 end
 
-(f::EqualTo)(y) = isequal(f.x, y)
+(f::CompareTo{F})(y) where {F} = F(y, f.x)
 
 """
-    equalto(x)
+    isequal(x)
 
 Create a function that compares its argument to `x` using [`isequal`](@ref); i.e. returns
-`y->isequal(x,y)`.
+`y -> isequal(y, x)`.
 
-The returned function is of type `Base.EqualTo`. This allows dispatching to
-specialized methods by using e.g. `f::Base.EqualTo` in a method signature.
+The returned function is of type `Base.CompareTo{isequal}`. This allows dispatching to
+specialized methods by using e.g. `f::Base.CompareTo{isequal}` in a method signature.
 """
-const equalto = EqualTo
+isequal(x) = CompareTo{isequal}(x)
 
-struct OccursIn{T} <: Function
-    x::T
-
-    OccursIn(x::T) where {T} = new{T}(x)
-end
-
-(f::OccursIn)(y) = y in f.x
+const EqualTo = CompareTo{isequal}
 
 """
-    occursin(x)
+    ==(x)
+
+Create a function that compares its argument to `x` using [`==`](@ref); i.e. returns
+`y -> y == x`.
+
+The returned function is of type `Base.CompareTo{==}`. This allows dispatching to
+specialized methods by using e.g. `f::Base.CompareTo{==}` in a method signature.
+"""
+==(x) = CompareTo{==}(x)
+
+"""
+    in(x)
 
 Create a function that checks whether its argument is [`in`](@ref) `x`; i.e. returns
 `y -> y in x`.
 
-The returned function is of type `Base.OccursIn`. This allows dispatching to
-specialized methods by using e.g. `f::Base.OccursIn` in a method signature.
+The returned function is of type `Base.CompareTo{in}`. This allows dispatching to
+specialized methods by using e.g. `f::Base.CompareTo{in}` in a method signature.
 """
-const occursin = OccursIn
+in(x) = CompareTo{in}(x)
+
+const OccursIn = CompareTo{in}
 
 """
     splat(f)
