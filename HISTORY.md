@@ -516,7 +516,7 @@ Deprecated or removed
     [#18558], [#19711], [#19712], [#19791], [#19802], [#19931], [#20543], [#20228]).
 
   *  All methods of character predicates (`isalnum`, `isalpha`, `iscntrl`, `isdigit`,
-     `isnumber`, `isgraph`, `islower`, `isprint`, `ispunct`, `isspace`, `isupper`,
+     `isnumber`, `isgraph`, `islowercase`, `isprint`, `ispunct`, `isspace`, `isuppercase`,
      `isxdigit`) that accept `AbstractStrings` have been deprecated in favor of `all`.
      For example, `isnumber("123")` should now be expressed `all(isnumber, "123")`
      ([#20342]).
@@ -1369,7 +1369,7 @@ Library improvements
 
     * `graphemes(s)` returns an iterator over grapheme substrings of `s` ([#9261]).
 
-    * Character predicates such as `islower()`, `isspace()`, etc. use
+    * Character predicates such as `islowercase()`, `isspace()`, etc. use
       utf8proc to provide uniform cross-platform behavior and
       up-to-date, locale-independent support for Unicode standards
       ([#5939]).
