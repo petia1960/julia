@@ -699,6 +699,7 @@ function Broadcast.broadcastable(x)
         return x
     end
 end
+@eval Base.Broadcast Base.@deprecate_binding Scalar DefaultArrayStyle{0} false
 # After deprecation is removed, enable the fallback broadcastable definitions in base/broadcast.jl
 
 # deprecate BitArray{...}(shape...) constructors to BitArray{...}(undef, shape...) equivalents
