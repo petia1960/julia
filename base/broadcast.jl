@@ -424,13 +424,13 @@ end
 
 Return either `x` or an object like `x` such that it supports `axes` and indexing.
 """
-broadcastable(x::Union{Symbol,String,Type,Function,UndefInitializer,Nothing,RoundingMode}) = Ref(x)
+broadcastable(x::Union{Symbol,AbstractString,Type,Function,UndefInitializer,Nothing,RoundingMode,Missing}) = Ref(x)
 broadcastable(x::Ptr) = Base.RefValue(x) # Cannot use Ref(::Ptr) until ambiguous deprecation goes through
 broadcastable(::Type{T}) where {T} = Base.RefValue{Type{T}}(T)
 broadcastable(x::AbstractArray) = x
 # In the future, default to collecting arguments. TODO: uncomment once deprecations are removed
 # broadcastable(x) = BroadcastStyle(typeof(x)) isa Unknown ? collect(x) : x
-# broadcastable(::Dict) = error("intentionally unimplemented to allow development in 1.x")
+# broadcastable(::Union{AbstractDict, NamedTuple}) = error("intentionally unimplemented to allow development in 1.x")
 
 """
     broadcast!(f, dest, As...)
