@@ -688,7 +688,7 @@ end
 # Also un-comment the new definition in base/indices.jl
 
 # Broadcast no longer defaults to treating its arguments as scalar (#)
-function Broadcast.broadcastable(x)
+@noinline function Broadcast.broadcastable(x)
     if Base.Broadcast.BroadcastStyle(typeof(x)) isa Broadcast.Unknown
         depwarn("""
             broadcast will default to iterating over its arguments in the future. Wrap arguments of
